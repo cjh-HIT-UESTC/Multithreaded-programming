@@ -1,0 +1,40 @@
+//在以下的示例当中  需要加强对线程执行顺序时间的理解： 因为线程的执行顺序不是线性的 包括对于主程序而言 线程的执行也不一定按照顺序来 而是有自己的时间 所以要加强理解
+
+///////
+
+#include <windows.h>
+#include "stdio.h"
+#include <process.h>         // WINDOWS下多线程的头文件
+
+DWORD WINAPI ThreadOne(LPVOID lpParameter)//在这里输入参数必须是void*型  
+{
+    printf("ThreadOne is Runing\n");
+    Sleep(100);//可以不slepp
+    return 0;//可以不返回
+}
+
+//也可以这样定义函数：
+void* WINAPI ThreadTwo(void* arg)
+{
+    printf("ThreadTwo is Runing\n");
+    Sleep(100);
+    
+}
+
+
+int main()
+{
+    HANDLE HOne;//就是个标识符，让调用的函数知道作用在谁身上。 其实就是void*
+    void* HTwo;
+    printf("***********************vpoet******************\n");
+    HOne = CreateThread(NULL, 0, ThreadOne, NULL, 0, NULL);
+    HTwo = CreateThread(NULL, 0, ThreadTwo, NULL, 0, NULL);
+    printf("ThreadOne Begin!\n");
+    CloseHandle(HOne);//关闭线程
+    CloseHandle(HTwo);//关闭线程
+    printf("MainThread Over!\n");
+    return 0;
+}
+
+
+
